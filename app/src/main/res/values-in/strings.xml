@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_field_email_hint">Masukkan email Anda</string>
+    <string name="text_field_username_hint">Masukkan username Anda</string>
+    <string name="text_field_password_hint">Masukkan password Anda</string>
+    <string name="login_placeholder">Belum punya akun? Daftar</string>
+    <string name="register_placeholder">Sudah punya akun? Masuk</string>
+    <string name="sign_in">Masuk</string>
+    <string name="sign_up">Daftar</string>
+    <string name="logout">Keluar</string>
+    <string name="posting">posting</string>
+    <string name="camera">Kamera</string>
+    <string name="gallery">Galeri</string>
+    <string name="text_field_description_hint">Deskripsi</string>
+    <string name="upload">Unggah</string>
+    <string name="rotate_description">rotasi gambar</string>
+    <string name="app_widget_description">Widget ini akan menampilkan cerita terbaru</string>
+    <string name="empty_value">Tidak ada cerita terbaru</string>
+    <string name="widget_title">Cerita terbaru</string>
+    <string name="invalid_email_message_error">Silakan isi alamat email dengan format yang tepat</string>
+    <string name="invalid_password_error_message">Kata sandi harus sepanjang 8 karakter dan tanpa spasi</string>
+    <string name="snackbar_empty_username">Data username harus diisi</string>
+    <string name="snackbar_empty_email">Data alamat email harus diisi</string>
+    <string name="snackbar_empty_password">Data kata sandi harus diisi</string>
+    <string name="arrow_back_description">Tombol kembali</string>
+    <string name="the_story_from">Cerita dari %1$s pada %2$s</string>
+    <string name="success_login_message">Anda berhasil masuk</string>
+    <string name="no_internet_connection">Silahkan cek koneksi internet anda</string>
+    <string name="camera_access_explanation">Fitur post story tidak tersedia karena fitur ini memerlukan akses kamera</string>
+    <string name="empty_stories_description">Tidak ada cerita</string>
+</resources>

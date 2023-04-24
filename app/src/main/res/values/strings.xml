@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name" translatable="false">MyStory</string>
+    <string name="text_field_email_hint">Enter your email</string>
+    <string name="text_field_username_hint">Enter your username</string>
+    <string name="text_field_password_hint">Enter your password</string>
+    <string name="login_placeholder">Don\'t have an account? Sign up</string>
+    <string name="register_placeholder">Have an account? Sign in</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="logout">Logout</string>
+    <string name="posting">posting</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="text_field_description_hint">Description</string>
+    <string name="upload">Upload</string>
+    <string name="post_story_title" translatable="false">Upload Story</string>
+    <string name="rotate_description">rotate the picture</string>
+    <string name="app_widget_description">This widget will show the latest story</string>
+    <string name="empty_value">No Latest Stories</string>
+    <string name="widget_title">Latest Stories</string>
+    <string name="tools_description" translatable="false">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla condimentum, tortor vel bibendum mollis, ipsum magna porttitor mauris, quis volutpat erat odio non nibh.</string>
+    <string name="invalid_email_message_error">Please enter a valid email address</string>
+    <string name="invalid_password_error_message">Password should be 8 characters long and without any spaces</string>
+    <string name="snackbar_empty_username">The username form must be filled</string>
+    <string name="snackbar_empty_email">The email form must be filled</string>
+    <string name="snackbar_empty_password">The password form must be filled</string>
+    <string name="arrow_back_description">back button</string>
+    <string name="the_story_from">the story from %1$s on %2$s</string>
+    <string name="success_login_message">Login is success</string>
+    <string name="no_internet_connection">Please check your internet connection</string>
+    <string name="camera_access_explanation">The post story feature is not available because this feature requires camera access</string>
+    <string name="transition_story_picture" translatable="false">story_picture</string>
+    <string name="transition_username" translatable="false">username</string>
+    <string name="transition_user_profile" translatable="false">user_profile</string>
+    <string name="empty_stories_description">no stories</string>
+</resources>
