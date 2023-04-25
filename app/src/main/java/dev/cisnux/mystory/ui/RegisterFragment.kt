@@ -175,11 +175,11 @@ class RegisterFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (passwordEditText.error != null) {
-                    passwordEditTextLayout.endIconMode = TextInputLayout.END_ICON_NONE
-                } else {
-                    passwordEditTextLayout.endIconMode = TextInputLayout.END_ICON_PASSWORD_TOGGLE
-                }
+                passwordEditTextLayout.endIconMode = if (passwordEditText.error != null)
+                    TextInputLayout.END_ICON_NONE
+                else
+                    TextInputLayout.END_ICON_PASSWORD_TOGGLE
+
             }
 
             override fun afterTextChanged(s: Editable?) {}

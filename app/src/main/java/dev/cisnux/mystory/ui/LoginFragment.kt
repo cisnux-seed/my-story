@@ -76,7 +76,11 @@ class LoginFragment : Fragment() {
     private fun onLogin() = with(binding) {
         loginButton.setOnClickListener {
             if (emailEditText.text?.isEmpty() == true) {
-                Snackbar.make(binding.root, getString(R.string.snackbar_empty_email), Snackbar.LENGTH_SHORT)
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.snackbar_empty_email),
+                    Snackbar.LENGTH_SHORT
+                )
                     .show()
                 return@setOnClickListener
             }
@@ -105,7 +109,11 @@ class LoginFragment : Fragment() {
                 is ApplicationState.Success -> {
                     progressBar.visibility = View.GONE
                     loginButton.text = getString(R.string.sign_in)
-                    Snackbar.make(binding.root, getString(R.string.success_login_message), Snackbar.LENGTH_SHORT)
+                    Snackbar.make(
+                        binding.root,
+                        getString(R.string.success_login_message),
+                        Snackbar.LENGTH_SHORT
+                    )
                         .show()
                     val toHomeFragment = LoginFragmentDirections.actionLoginFragmentToHomeFragment()
                     findNavController().navigate(toHomeFragment)
@@ -114,8 +122,9 @@ class LoginFragment : Fragment() {
                 is ApplicationState.Failed -> {
                     progressBar.visibility = View.GONE
                     loginButton.text = getString(R.string.sign_in)
-                    if (applicationState.failure is Failure.ConnectionFailure){
-                        applicationState.failure.message = getString(R.string.no_internet_connection)
+                    if (applicationState.failure is Failure.ConnectionFailure) {
+                        applicationState.failure.message =
+                            getString(R.string.no_internet_connection)
                     }
                     val errorMessage = applicationState.failure.message
                     errorMessage?.let {
@@ -154,11 +163,11 @@ class LoginFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (passwordEditText.error != null) {
-                    passwordEditTextLayout.endIconMode = END_ICON_NONE
-                } else {
-                    passwordEditTextLayout.endIconMode = END_ICON_PASSWORD_TOGGLE
-                }
+                passwordEditTextLayout.endIconMode = if (passwordEditText.error != null)
+                    END_ICON_NONE
+                else
+                    END_ICON_PASSWORD_TOGGLE
+
             }
 
             override fun afterTextChanged(s: Editable?) {}
