@@ -10,8 +10,8 @@ data class UserAuth(
     private var _username: String = ""
     val username get() = _username
 
-    constructor(name: String, email: String, password: String) : this(email, password) {
-        this._username = name
+    constructor(username: String, email: String, password: String) : this(email, password) {
+        this._username = username
     }
 }
 

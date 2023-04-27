@@ -30,7 +30,7 @@ class AuthRepositoryImpl @Inject constructor(
                 emit(ApplicationState.Loading())
                 val response = remoteDataSource.login(userAuth.asUserLogin())
                 localDataSource.saveToken(response.loginResult.token)
-                emit(ApplicationState.Success(response.loginResult.name))
+                emit(ApplicationState.Success(response.loginResult.token))
             } catch (e: IOException) {
                 e.printStackTrace()
                 emit(ApplicationState.Failed(ConnectionFailure()))

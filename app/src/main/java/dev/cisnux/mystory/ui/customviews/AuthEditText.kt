@@ -1,9 +1,8 @@
 package dev.cisnux.mystory.ui.customviews
 
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.AttributeSet
+import androidx.core.widget.doOnTextChanged
 import com.google.android.material.textfield.TextInputEditText
 import dev.cisnux.mystory.R
 import dev.cisnux.mystory.utils.FormType
@@ -23,18 +22,9 @@ class AuthEditText : TextInputEditText {
     )
 
     init {
-        addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                val text = s.toString()
-                doValidation(text)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
+        doOnTextChanged { text, _, _, _ ->
+            doValidation(text.toString())
+        }
     }
 
     private fun doValidation(text: String) {

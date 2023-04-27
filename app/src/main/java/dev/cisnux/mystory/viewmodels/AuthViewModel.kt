@@ -19,7 +19,8 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepository) 
     val registerState: LiveData<ApplicationState<String>> get() = _registerState
 
     private var _loginState = MutableLiveData<ApplicationState<String>>()
-    val loginState: LiveData<ApplicationState<String>> get() = _loginState
+    val loginState: LiveData<ApplicationState<String>>
+        get() = _loginState
 
     private val _isAlreadyLogin = MutableLiveData<String?>()
     val isAlreadyLogin: LiveData<Boolean> = _isAlreadyLogin.map {
@@ -27,7 +28,7 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepository) 
     }
 
     init {
-        getLoginStatus()
+        getLoginSession()
     }
 
     fun register(name: String, email: String, password: String) = viewModelScope.launch {
@@ -49,7 +50,7 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepository) 
         repository.logout()
     }
 
-    private fun getLoginStatus() = viewModelScope.launch {
+    private fun getLoginSession() = viewModelScope.launch {
         _isAlreadyLogin.value = repository.isAlreadyLogin()
     }
 }

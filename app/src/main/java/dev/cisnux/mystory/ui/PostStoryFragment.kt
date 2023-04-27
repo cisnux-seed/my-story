@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -25,7 +24,6 @@ import dev.cisnux.mystory.R
 import dev.cisnux.mystory.databinding.FragmentPostStoryBinding
 import dev.cisnux.mystory.utils.ApplicationState
 import dev.cisnux.mystory.utils.Failure
-import dev.cisnux.mystory.viewmodels.HomeViewModel
 import dev.cisnux.mystory.viewmodels.PostStoryViewModel
 import kotlinx.coroutines.launch
 import java.io.File
@@ -35,7 +33,6 @@ class PostStoryFragment : Fragment() {
     private var _binding: FragmentPostStoryBinding? = null
     private val binding get() = _binding!!
     private val viewModel: PostStoryViewModel by viewModels()
-    private val homeViewModel: HomeViewModel by activityViewModels()
     private var getFile: File? = null
     private lateinit var currentPhotoPath: String
     private val launcherIntentCamera = registerForActivityResult(
@@ -75,7 +72,6 @@ class PostStoryFragment : Fragment() {
                     getString(R.string.camera_access_explanation),
                     Snackbar.LENGTH_LONG
                 ).show()
-
         }
 
     override fun onCreateView(
@@ -132,7 +128,6 @@ class PostStoryFragment : Fragment() {
                 is ApplicationState.Success -> {
                     progressBar.visibility = View.GONE
                     uploadButton.text = getString(R.string.upload)
-                    homeViewModel.refreshStories()
                     findNavController().navigateUp()
                 }
 
@@ -179,6 +174,11 @@ class PostStoryFragment : Fragment() {
         intent.type = "image/*"
         val chooser = Intent.createChooser(intent, "Choose a Picture")
         launcherIntentGallery.launch(chooser)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
 

@@ -4,14 +4,12 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.res.Configuration
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
@@ -29,7 +27,7 @@ import java.util.Locale
 class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: AuthViewModel by activityViewModels()
+    private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -127,9 +125,7 @@ class RegisterFragment : Fragment() {
                         Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT)
                             .show()
                     }
-                    val toLoginFragment =
-                        RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
-                    findNavController().navigate(toLoginFragment)
+                    findNavController().navigateUp()
                 }
 
                 is ApplicationState.Failed -> {
@@ -155,7 +151,6 @@ class RegisterFragment : Fragment() {
 
     private fun setUpFormAuthentication() = with(binding) {
         val registerTextPlaceholder = resources.getString(R.string.register_placeholder)
-        Log.d(RegisterFragment::class.simpleName, Locale.getDefault().displayLanguage)
         val text = createSpannableText(
             registerTextPlaceholder,
             resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK,
@@ -168,22 +163,12 @@ class RegisterFragment : Fragment() {
             findNavController().navigate(toLoginFragment)
         }
         passwordEditText.formType = FormType.Password
-        passwordEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(
-                s: CharSequence?, start: Int, count: Int, after: Int
-            ) {
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                passwordEditTextLayout.endIconMode = if (passwordEditText.error != null)
-                    TextInputLayout.END_ICON_NONE
-                else
-                    TextInputLayout.END_ICON_PASSWORD_TOGGLE
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {}
-        })
+        passwordEditText.doOnTextChanged {_, _, _, _ ->
+            passwordEditTextLayout.endIconMode = if (passwordEditText.error != null)
+                TextInputLayout.END_ICON_NONE
+            else
+                TextInputLayout.END_ICON_PASSWORD_TOGGLE
+        }
     }
 
     override fun onDestroy() {

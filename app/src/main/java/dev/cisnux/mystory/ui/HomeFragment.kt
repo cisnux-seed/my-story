@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,16 +25,11 @@ import javax.inject.Inject
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val homeViewModel: HomeViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
 
     @Inject
     lateinit var adapter: StoryAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        homeViewModel.refreshStories()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,6 +53,7 @@ class HomeFragment : Fragment() {
                 findNavController().navigate(toLoginFragment)
             } else {
                 root.visibility = View.VISIBLE
+                homeViewModel.refreshStories()
             }
         }
         fabPosting.setOnClickListener {
@@ -88,10 +83,15 @@ class HomeFragment : Fragment() {
         with(binding) {
             when (applicationState) {
                 is ApplicationState.Success -> {
+                    val stories = applicationState.data
                     progressBar.visibility = View.GONE
-                    if (applicationState.data?.isNotEmpty() == true)
-                        adapter.submitList(applicationState.data)
-                    else emptyStories.visibility = View.VISIBLE
+                    if (stories?.isNotEmpty() == true) {
+                        storyRecyclerView.smoothScrollToPosition(0)
+                        adapter.submitList(stories)
+                        emptyStories.visibility = View.GONE
+                    } else {
+                        emptyStories.visibility = View.VISIBLE
+                    }
                 }
 
                 is ApplicationState.Failed -> {
@@ -112,4 +112,9 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }
