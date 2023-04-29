@@ -42,7 +42,7 @@ class PostStoryFragment : Fragment() {
             val myFile = File(currentPhotoPath)
             myFile.let { file ->
                 getFile = file
-                binding.rotate.visibility = View.VISIBLE
+                binding.rotateBtn.visibility = View.VISIBLE
                 binding.storyPicture.setImageBitmap(BitmapFactory.decodeFile(file.path))
             }
         }
@@ -57,7 +57,7 @@ class PostStoryFragment : Fragment() {
                     val myFile = viewModel.convertUriPhotoToFilePhoto(uri)
                     getFile = myFile
                 }
-                binding.rotate.visibility = View.VISIBLE
+                binding.rotateBtn.visibility = View.VISIBLE
                 binding.storyPicture.setImageURI(uri)
             }
         }
@@ -85,7 +85,7 @@ class PostStoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupPostStoryView()
-        binding.rotate.setOnClickListener {
+        binding.rotateBtn.setOnClickListener {
             getFile?.let {
                 lifecycleScope.launch {
                     viewModel.rotatePhoto(it)

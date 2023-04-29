@@ -42,6 +42,8 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepository) 
         val userAuth = UserAuth(email, password)
         repository.login(userAuth).collect {
             _loginState.value = it
+            if(it is ApplicationState.Success)
+                _isAlreadyLogin.value = it.data
         }
     }
 

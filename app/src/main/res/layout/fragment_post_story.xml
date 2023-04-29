@@ -112,11 +112,13 @@
         app:layout_constraintStart_toStartOf="@+id/uploadButton"
         app:layout_constraintTop_toTopOf="@+id/uploadButton" />
 
-    <ImageView
-        android:id="@+id/rotate"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/rotateBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:background="@color/black_transparent"
+        app:shapeAppearanceOverlay="@style/RoundedImage"
         android:layout_marginEnd="12dp"
         android:contentDescription="@string/rotate_description"
         android:src="@drawable/ic_rotate_24dp"
