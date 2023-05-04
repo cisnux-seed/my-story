@@ -4,8 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dev.cisnux.mystory.local.StoryLocalDataSource
-import dev.cisnux.mystory.local.StoryLocalDataSourceImpl
+import dev.cisnux.mystory.locals.StoryLocalDataSource
+import dev.cisnux.mystory.locals.StoryLocalDataSourceImpl
 import javax.inject.Singleton
 
 @Module

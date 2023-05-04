@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.cisnux.mystory.domain.StoryRepository
-import dev.cisnux.mystory.repositories.StoryRepositoryImpl
+import dev.cisnux.mystory.data.StoryRepositoryImpl
 import javax.inject.Singleton
 
 @Module

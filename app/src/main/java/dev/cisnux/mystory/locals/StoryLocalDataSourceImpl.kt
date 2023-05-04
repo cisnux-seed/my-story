@@ -1,4 +1,4 @@
-package dev.cisnux.mystory.local
+package dev.cisnux.mystory.locals
 
 import android.app.Application
 import android.graphics.Bitmap
@@ -6,6 +6,11 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Environment
+import androidx.paging.PagingSource
+import androidx.room.withTransaction
+import dev.cisnux.mystory.database.RemoteKeyEntity
+import dev.cisnux.mystory.database.StoryDatabase
+import dev.cisnux.mystory.database.StoryEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
@@ -18,8 +23,36 @@ import javax.inject.Inject
 
 class StoryLocalDataSourceImpl @Inject constructor(
     private val application: Application,
+    private val database: StoryDatabase
 ) :
     StoryLocalDataSource {
+    override suspend fun getRemoteKeyById(id: String): RemoteKeyEntity? =
+        withContext(Dispatchers.IO) {
+            database.remoteKeyDao().getRemoteKeyById(id)
+        }
+
+    override suspend fun onUpdateStories(
+        isRefresh: Boolean,
+        stories: List<StoryEntity>,
+        remoteKeys: List<RemoteKeyEntity>
+    ) = withContext(Dispatchers.IO) {
+        database.withTransaction {
+            if (isRefresh) {
+                database.remoteKeyDao().deleteRemoteKeys()
+                database.storyDao().deleteStories()
+            }
+            database.remoteKeyDao().insertRemoteKeys(remoteKeys)
+            database.storyDao().insertStories(stories)
+        }
+    }
+
+    override fun getStoryEntities(): PagingSource<Int, StoryEntity> =
+        database.storyDao().getStoryEntities()
+
+    override suspend fun getStoryForWidgets(): List<StoryEntity> = withContext(Dispatchers.IO) {
+        database.storyDao().getStoryEntitiesForWidget()
+    }
+
     override suspend fun createStoryFile(): File = withContext(Dispatchers.IO) {
         val timeStamp: String = SimpleDateFormat(
             FILENAME_FORMAT,

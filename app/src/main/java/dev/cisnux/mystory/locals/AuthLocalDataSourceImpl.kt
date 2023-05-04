@@ -1,4 +1,4 @@
-package dev.cisnux.mystory.local
+package dev.cisnux.mystory.locals
 
 import android.content.SharedPreferences
 import kotlinx.coroutines.Dispatchers

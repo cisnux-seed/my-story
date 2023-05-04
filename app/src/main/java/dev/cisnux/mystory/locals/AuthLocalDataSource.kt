@@ -1,4 +1,4 @@
-package dev.cisnux.mystory.local
+package dev.cisnux.mystory.locals
 
 interface AuthLocalDataSource {
     suspend fun saveToken(token: String)

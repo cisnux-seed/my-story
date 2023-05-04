@@ -1,7 +1,7 @@
 package dev.cisnux.mystory.services
 
 import com.squareup.moshi.Json
-import dev.cisnux.mystory.domain.Story
+import dev.cisnux.mystory.database.StoryEntity
 
 data class StoryResponse(
 
@@ -16,6 +16,11 @@ data class StoryResponse(
 )
 
 data class ListStoryItem(
+    @Json(name = "id")
+    val id: String,
+
+    @Json(name = "name")
+    val name: String,
 
     @Json(name = "photoUrl")
     val photoUrl: String,
@@ -23,19 +28,21 @@ data class ListStoryItem(
     @Json(name = "createdAt")
     val createdAt: String,
 
-    @Json(name = "name")
-    val name: String,
+    @Json(name = "lat")
+    val lat: Double,
 
-    @Json(name = "id")
-    val id: String,
+    @Json(name = "lon")
+    val lon: Double
 )
 
-
-fun List<ListStoryItem>.asStories(): List<Story> = map {
-    Story(
-        id = it.id,
-        username = it.name,
-        photoUrl = it.photoUrl,
-        createdAt = it.createdAt
-    )
-}
+fun List<ListStoryItem>.asStoryEntities(): List<StoryEntity> =
+    map { (id, name, photoUrl, createdAt, lat, lon) ->
+        StoryEntity(
+            id = id,
+            name = name,
+            photoUrl = photoUrl,
+            createdAt = createdAt,
+            lat = lat,
+            lon = lon
+        )
+    }

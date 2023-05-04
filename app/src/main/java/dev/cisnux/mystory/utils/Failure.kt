@@ -1,6 +1,6 @@
 package dev.cisnux.mystory.utils
 
-sealed class Failure(var message: String?) {
+sealed class Failure(override var message: String?) : Exception(message) {
     class ConnectionFailure(
         message: String? = null,
     ) : Failure(message)

@@ -1,4 +1,4 @@
-package dev.cisnux.mystory.remote
+package dev.cisnux.mystory.remotes
 
 import dev.cisnux.mystory.services.LoginResponse
 import dev.cisnux.mystory.services.RegisterResponse

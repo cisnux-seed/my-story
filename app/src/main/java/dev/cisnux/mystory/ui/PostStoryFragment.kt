@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -35,6 +36,7 @@ class PostStoryFragment : Fragment() {
     private val viewModel: PostStoryViewModel by viewModels()
     private var getFile: File? = null
     private lateinit var currentPhotoPath: String
+    private lateinit var savedStateHandle: SavedStateHandle
     private val launcherIntentCamera = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
@@ -84,6 +86,8 @@ class PostStoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        savedStateHandle = findNavController().previousBackStackEntry!!.savedStateHandle
+        savedStateHandle[ON_POST] = false
         setupPostStoryView()
         binding.rotateBtn.setOnClickListener {
             getFile?.let {
@@ -128,6 +132,7 @@ class PostStoryFragment : Fragment() {
                 is ApplicationState.Success -> {
                     progressBar.visibility = View.GONE
                     uploadButton.text = getString(R.string.upload)
+                    savedStateHandle[ON_POST] = true
                     findNavController().navigateUp()
                 }
 
@@ -179,6 +184,10 @@ class PostStoryFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    companion object {
+        const val ON_POST = "on_post"
     }
 }
 

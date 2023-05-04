@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.util.Log
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import androidx.core.os.bundleOf
@@ -14,7 +15,6 @@ import coil.request.SuccessResult
 import dev.cisnux.mystory.R
 import dev.cisnux.mystory.domain.StoryRepository
 import dev.cisnux.mystory.ui.widgets.LatestStoryWidget
-import dev.cisnux.mystory.utils.ApplicationState
 import kotlinx.coroutines.runBlocking
 
 internal class StackRemoteViewsFactory(
@@ -27,29 +27,25 @@ internal class StackRemoteViewsFactory(
 
     }
 
-    override fun onDataSetChanged() =
+    override fun onDataSetChanged(): Unit =
         runBlocking {
-            repository.getStories().collect {
-                if (it is ApplicationState.Success) {
-                    it.data?.let { latestStories ->
-                        if (stories.size > 0)
-                            stories.clear()
-                        stories.addAll(latestStories.map { story ->
-                            val request = ImageRequest.Builder(context)
-                                .crossfade(true)
-                                .networkCachePolicy(CachePolicy.ENABLED)
-                                .diskCachePolicy(CachePolicy.ENABLED)
-                                .memoryCachePolicy(CachePolicy.ENABLED)
-                                .data(story.photoUrl)
-                                .allowHardware(false)
-                                .build()
-                            val result =
-                                (context.imageLoader.execute(request) as SuccessResult).drawable
-                            (result as BitmapDrawable).bitmap
-                        })
-                    }
-                }
-            }
+            val latestStories = repository.getStoriesForWidget()
+            Log.d(StackRemoteViewsFactory::class.simpleName, latestStories.toString())
+            if (stories.size > 0)
+                stories.clear()
+            stories.addAll(latestStories.map { story ->
+                val request = ImageRequest.Builder(context)
+                    .crossfade(true)
+                    .networkCachePolicy(CachePolicy.ENABLED)
+                    .diskCachePolicy(CachePolicy.ENABLED)
+                    .memoryCachePolicy(CachePolicy.ENABLED)
+                    .data(story.photoUrl)
+                    .allowHardware(false)
+                    .build()
+                val result =
+                    (context.imageLoader.execute(request) as SuccessResult).drawable
+                (result as BitmapDrawable).bitmap
+            })
         }
 
     override fun onDestroy() {
@@ -80,3 +76,5 @@ internal class StackRemoteViewsFactory(
 
     override fun hasStableIds(): Boolean = false
 }
+
+

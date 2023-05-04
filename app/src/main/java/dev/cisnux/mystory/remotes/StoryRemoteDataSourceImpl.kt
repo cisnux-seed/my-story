@@ -1,4 +1,4 @@
-package dev.cisnux.mystory.remote
+package dev.cisnux.mystory.remotes
 
 import dev.cisnux.mystory.services.DetailStoryResponse
 import dev.cisnux.mystory.services.StoryResponse
@@ -14,9 +14,14 @@ import javax.inject.Inject
 
 class StoryRemoteDataSourceImpl @Inject constructor(private val service: StoryService) :
     StoryRemoteDataSource {
-    override suspend fun getStories(token: String): StoryResponse = withContext(Dispatchers.IO) {
-        service.getStories(token)
-    }
+    override suspend fun getStories(token: String, page: Int, size: Int): StoryResponse =
+        withContext(Dispatchers.IO) {
+            service.getStories(
+                token = token,
+                page = page,
+                size = size
+            )
+        }
 
     override suspend fun getDetailStory(token: String, id: String): DetailStoryResponse =
         withContext(Dispatchers.IO) {

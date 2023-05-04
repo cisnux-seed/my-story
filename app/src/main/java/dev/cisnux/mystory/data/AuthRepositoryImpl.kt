@@ -1,11 +1,11 @@
-package dev.cisnux.mystory.repositories
+package dev.cisnux.mystory.data
 
 import dev.cisnux.mystory.domain.AuthRepository
 import dev.cisnux.mystory.domain.UserAuth
 import dev.cisnux.mystory.domain.asUserLogin
 import dev.cisnux.mystory.domain.asUserRegister
-import dev.cisnux.mystory.local.AuthLocalDataSource
-import dev.cisnux.mystory.remote.AuthRemoteDataSource
+import dev.cisnux.mystory.locals.AuthLocalDataSource
+import dev.cisnux.mystory.remotes.AuthRemoteDataSource
 import dev.cisnux.mystory.utils.ApplicationState
 import dev.cisnux.mystory.utils.Failure.ConnectionFailure
 import dev.cisnux.mystory.utils.HTTP_FAILURES
