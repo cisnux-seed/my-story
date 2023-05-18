@@ -1,5 +1,6 @@
 package dev.cisnux.mystory.ui.adapters
 
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.Navigation.findNavController
@@ -27,6 +28,16 @@ class StoryAdapter : PagingDataAdapter<Story, StoryAdapter.ViewHolder>(DiffCallb
                 networkCachePolicy(CachePolicy.ENABLED)
                 diskCachePolicy(CachePolicy.ENABLED)
                 memoryCachePolicy(CachePolicy.ENABLED)
+            }
+            description.text = story.description
+            description.setOnClickListener {
+                if (description.ellipsize == TextUtils.TruncateAt.END) {
+                    description.ellipsize = null
+                    description.maxLines = Integer.MAX_VALUE
+                } else {
+                    description.ellipsize = TextUtils.TruncateAt.END
+                    description.maxLines = 2
+                }
             }
             storyPicture.contentDescription = binding.root.context.getString(
                 R.string.the_story_from,

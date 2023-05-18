@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/story_locations"
+    app:startDestination="@id/storyLocationsFragment">
+
+    <fragment
+        android:id="@+id/storyLocationsFragment"
+        android:name="dev.cisnux.mystory.ui.StoryLocationFragment"
+        android:label="fragment_story_locations"
+        tools:layout="@layout/fragment_story_location" />
+</navigation>

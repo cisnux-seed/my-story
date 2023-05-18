@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home_24dp"
+        android:title="@string/title_home" />
+    <item
+        android:id="@+id/story_locations"
+        android:icon="@drawable/ic_location_24dp"
+        android:title="@string/title_story_locations" />
+</menu>

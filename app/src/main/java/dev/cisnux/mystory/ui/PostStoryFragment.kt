@@ -1,15 +1,22 @@
 package dev.cisnux.mystory.ui
 
 import android.Manifest
+import android.app.Activity.RESULT_CANCELED
+import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -19,6 +26,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.Priority
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.cisnux.mystory.R
@@ -28,6 +41,7 @@ import dev.cisnux.mystory.utils.Failure
 import dev.cisnux.mystory.viewmodels.PostStoryViewModel
 import kotlinx.coroutines.launch
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class PostStoryFragment : Fragment() {
@@ -37,6 +51,24 @@ class PostStoryFragment : Fragment() {
     private var getFile: File? = null
     private lateinit var currentPhotoPath: String
     private lateinit var savedStateHandle: SavedStateHandle
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var myLocation: Location? = null
+    private val resolutionLauncher =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+            when (result.resultCode) {
+                RESULT_OK -> {
+                    Log.i(TAG, "onActivityResult: All location settings are satisfied.")
+                }
+
+                RESULT_CANCELED -> {
+                    Toast.makeText(
+                        requireActivity(),
+                        getString(R.string.turn_on_gps),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
     private val launcherIntentCamera = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {
@@ -46,6 +78,23 @@ class PostStoryFragment : Fragment() {
                 getFile = file
                 binding.rotateBtn.visibility = View.VISIBLE
                 binding.storyPicture.setImageBitmap(BitmapFactory.decodeFile(file.path))
+            }
+        }
+    }
+    private val locationPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        when {
+            permissions[Manifest.permission.ACCESS_FINE_LOCATION] ?: false -> {
+                shareMyLocation()
+            }
+
+            permissions[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false -> {
+                shareMyLocation()
+            }
+
+            else -> {
+                binding.shareLocation.isChecked = false
             }
         }
     }
@@ -64,7 +113,7 @@ class PostStoryFragment : Fragment() {
             }
         }
     }
-    private val requestPermissionLauncher =
+    private val cameraPermissionRequest =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it)
                 startTakePhoto()
@@ -75,6 +124,11 @@ class PostStoryFragment : Fragment() {
                     Snackbar.LENGTH_LONG
                 ).show()
         }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -104,6 +158,10 @@ class PostStoryFragment : Fragment() {
         materialToolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+        shareLocation.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked)
+                shareMyLocation()
+        }
         cameraButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
                     requireContext(),
@@ -112,7 +170,7 @@ class PostStoryFragment : Fragment() {
             )
                 startTakePhoto()
             else
-                requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+                cameraPermissionRequest.launch(Manifest.permission.CAMERA)
         }
         galleryButton.setOnClickListener {
             startTakePhotoFromGallery()
@@ -120,8 +178,68 @@ class PostStoryFragment : Fragment() {
         uploadButton.setOnClickListener {
             getFile?.let {
                 if (postEditText.text.toString().isNotEmpty()) {
-                    viewModel.postStory(it, postEditText.text.toString())
+                    viewModel.postStory(
+                        it,
+                        postEditText.text.toString(),
+                        myLocation?.latitude,
+                        myLocation?.longitude
+                    )
                 }
+            }
+        }
+    }
+
+    private fun shareMyLocation() {
+        when {
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ).all { permission ->
+                ContextCompat.checkSelfPermission(
+                    requireActivity(), permission
+                ) == PackageManager.PERMISSION_GRANTED
+            } -> {
+                val locationRequest = LocationRequest.Builder(
+                    TimeUnit.SECONDS.toMillis(1)
+                ).apply {
+                    setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+                    setMaxUpdateDelayMillis(TimeUnit.SECONDS.toMillis(1))
+                }.build()
+                val locationSettingsBuilder = LocationSettingsRequest.Builder()
+                    .addLocationRequest(locationRequest)
+                val client = LocationServices.getSettingsClient(requireActivity())
+                client.checkLocationSettings(locationSettingsBuilder.build())
+                    .addOnSuccessListener {
+                        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                            binding.shareLocation.isChecked = true
+                            location?.let {
+                                myLocation = location
+                            }
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        binding.shareLocation.isChecked = false
+                        if (exception is ResolvableApiException) {
+                            try {
+                                resolutionLauncher.launch(
+                                    IntentSenderRequest.Builder(exception.resolution).build()
+                                )
+                            } catch (sendEx: IntentSender.SendIntentException) {
+                                Log.e(TAG, sendEx.stackTraceToString())
+                            }
+                        }
+                    }
+
+            }
+
+            else -> {
+                binding.shareLocation.isChecked = false
+                locationPermissionRequest.launch(
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
+                )
             }
         }
     }
@@ -188,6 +306,7 @@ class PostStoryFragment : Fragment() {
 
     companion object {
         const val ON_POST = "on_post"
+        private val TAG = PostStoryFragment::class.simpleName
     }
 }
 

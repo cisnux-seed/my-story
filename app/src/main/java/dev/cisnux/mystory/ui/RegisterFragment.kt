@@ -7,12 +7,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import dev.cisnux.mystory.R
 import dev.cisnux.mystory.databinding.FragmentRegisterBinding
@@ -126,6 +124,7 @@ class RegisterFragment : Fragment() {
                             .show()
                     }
                     findNavController().navigateUp()
+                    viewModel.resetRegisterSession()
                 }
 
                 is ApplicationState.Failed -> {
@@ -159,16 +158,10 @@ class RegisterFragment : Fragment() {
         )
         signIn.text = text
         signIn.setOnClickListener {
-            val toLoginFragment = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
-            findNavController().navigate(toLoginFragment)
+            findNavController().navigateUp()
         }
         passwordEditText.formType = FormType.Password
-        passwordEditText.doOnTextChanged { _, _, _, _ ->
-            passwordEditTextLayout.endIconMode = if (passwordEditText.error != null)
-                TextInputLayout.END_ICON_NONE
-            else
-                TextInputLayout.END_ICON_PASSWORD_TOGGLE
-        }
+        passwordEditText.textInputLayout = passwordEditTextLayout
     }
 
     override fun onDestroy() {

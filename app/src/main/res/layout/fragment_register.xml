@@ -1,125 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:scrollbars="none"
     tools:context=".ui.LoginFragment">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/usernameEditTextLayout"
-        style="@style/Widget.Material3.TextInputEditText.OutlinedBox.Dense"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:alpha="0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerPict"
-        app:startIconDrawable="@drawable/ic_person_24dp"
-        tools:alpha="1">
+        tools:context=".ui.LoginFragment">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/usernameEditText"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/usernameEditTextLayout"
+            style="@style/Widget.Material3.TextInputEditText.OutlinedBox.Dense"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/text_field_username_hint"
-            android:inputType="textEmailAddress"
-            android:maxLines="1" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:alpha="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registerPict"
+            app:startIconDrawable="@drawable/ic_person_24dp"
+            tools:alpha="1">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/emailEditTextLayout"
-        style="@style/Widget.Material3.TextInputEditText.OutlinedBox.Dense"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:alpha="0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameEditTextLayout"
-        app:startIconDrawable="@drawable/ic_email_24dp"
-        tools:alpha="1">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/usernameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/text_field_username_hint"
+                android:inputType="textEmailAddress"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <dev.cisnux.mystory.ui.customviews.AuthEditText
-            android:id="@+id/emailEditText"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailEditTextLayout"
+            style="@style/Widget.Material3.TextInputEditText.OutlinedBox.Dense"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/text_field_email_hint"
-            android:inputType="textEmailAddress"
-            android:maxLines="1" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:alpha="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/usernameEditTextLayout"
+            app:startIconDrawable="@drawable/ic_email_24dp"
+            tools:alpha="1">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordEditTextLayout"
-        style="@style/Widget.Material3.TextInputEditText.OutlinedBox.Dense"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:alpha="0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailEditTextLayout"
-        app:passwordToggleEnabled="true"
-        app:startIconDrawable="@drawable/ic_password_24dp"
-        tools:alpha="1">
+            <dev.cisnux.mystory.ui.customviews.AuthEditText
+                android:id="@+id/emailEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/text_field_email_hint"
+                android:inputType="textEmailAddress"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <dev.cisnux.mystory.ui.customviews.AuthEditText
-            android:id="@+id/passwordEditText"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordEditTextLayout"
+            style="@style/Widget.Material3.TextInputEditText.OutlinedBox.Dense"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/text_field_password_hint"
-            android:inputType="textPassword"
-            android:maxLines="1" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:alpha="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emailEditTextLayout"
+            app:passwordToggleEnabled="true"
+            app:startIconDrawable="@drawable/ic_password_24dp"
+            tools:alpha="1">
 
-    <ImageView
-        android:id="@+id/registerPict"
-        android:layout_width="@dimen/auth_image_width"
-        android:layout_height="@dimen/auth_image_height"
-        android:layout_marginTop="24dp"
-        android:importantForAccessibility="no"
-        android:src="@drawable/login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <dev.cisnux.mystory.ui.customviews.AuthEditText
+                android:id="@+id/passwordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/text_field_password_hint"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/signIn"
-        style="@style/TextAppearance.Material3.LabelMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="16dp"
-        android:alpha="0"
-        app:layout_constraintEnd_toEndOf="@+id/passwordEditTextLayout"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout"
-        tools:alpha="1"
-        tools:text="@string/register_placeholder" />
+        <ImageView
+            android:id="@+id/registerPict"
+            android:layout_width="@dimen/auth_image_width"
+            android:layout_height="@dimen/auth_image_height"
+            android:layout_marginTop="24dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/registerButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:alpha="0"
-        android:text="@string/sign_up"
-        app:cornerRadius="5dp"
-        app:layout_constraintEnd_toEndOf="@+id/signIn"
-        app:layout_constraintStart_toStartOf="@+id/passwordEditTextLayout"
-        app:layout_constraintTop_toBottomOf="@+id/signIn"
-        tools:alpha="1" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/signIn"
+            style="@style/TextAppearance.Material3.LabelMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:alpha="0"
+            app:layout_constraintEnd_toEndOf="@+id/passwordEditTextLayout"
+            app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout"
+            tools:alpha="1"
+            tools:text="@string/register_placeholder" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:indeterminateTint="?attr/colorOnPrimary"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/registerButton"
-        app:layout_constraintEnd_toEndOf="@+id/registerButton"
-        app:layout_constraintStart_toStartOf="@+id/registerButton"
-        app:layout_constraintTop_toTopOf="@+id/registerButton" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/registerButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:alpha="0"
+            android:text="@string/sign_up"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="@+id/signIn"
+            app:layout_constraintStart_toStartOf="@+id/passwordEditTextLayout"
+            app:layout_constraintTop_toBottomOf="@+id/signIn"
+            tools:alpha="1" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:indeterminateTint="?attr/colorOnPrimary"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/registerButton"
+            app:layout_constraintEnd_toEndOf="@+id/registerButton"
+            app:layout_constraintStart_toStartOf="@+id/registerButton"
+            app:layout_constraintTop_toTopOf="@+id/registerButton" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

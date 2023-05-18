@@ -15,10 +15,9 @@ import dev.cisnux.mystory.utils.HTTP_FAILURES
 import org.json.JSONObject
 import retrofit2.HttpException
 import java.io.IOException
-import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
-class StoryRemoteMediator @Inject constructor(
+class StoryRemoteMediator(
     private val storyLocalDataSource: StoryLocalDataSource,
     private val authLocalDataSource: AuthLocalDataSource,
     private val storyRemoteDataSource: StoryRemoteDataSource

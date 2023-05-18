@@ -28,4 +28,7 @@
     <string name="no_internet_connection">Silahkan cek koneksi internet anda</string>
     <string name="camera_access_explanation">Fitur post story tidak tersedia karena fitur ini memerlukan akses kamera</string>
     <string name="empty_stories_description">Tidak ada cerita</string>
+    <string name="share_my_location">Bagikan lokasi saya</string>
+    <string name="turn_on_gps">Anda harus mengaktifkan GPS untuk menampilkan lokasi Anda!</string>
+    <string name="refresh_description">Perbarui cerita</string>
 </resources>

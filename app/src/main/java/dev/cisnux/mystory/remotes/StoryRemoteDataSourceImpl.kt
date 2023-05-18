@@ -31,15 +31,29 @@ class StoryRemoteDataSourceImpl @Inject constructor(private val service: StorySe
             )
         }
 
-    override suspend fun postStory(token: String, file: File, description: String) =
+    override suspend fun postStory(
+        token: String,
+        file: File,
+        description: String,
+        lat: Double?,
+        lon: Double?
+    ) =
         withContext(Dispatchers.IO) {
-            val requestDescription = description.toRequestBody("text/plain".toMediaType())
+            val descriptionRequestBody = description.toRequestBody("text/plain".toMediaType())
+            val latRequestBody = lat?.toString()?.toRequestBody("text/plain".toMediaType())
+            val lonRequestBody = lon?.toString()?.toRequestBody("text/plain".toMediaType())
             val requestImageFile = file.asRequestBody("image/jpg".toMediaType())
             val imageMultipart = MultipartBody.Part.createFormData(
                 "photo",
                 file.name,
                 requestImageFile
             )
-            service.postStory(token, imageMultipart, requestDescription)
+            service.postStory(
+                token,
+                imageMultipart,
+                descriptionRequestBody,
+                latRequestBody,
+                lonRequestBody
+            )
         }
 }

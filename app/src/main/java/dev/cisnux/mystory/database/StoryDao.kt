@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface StoryDao {
@@ -18,5 +19,8 @@ interface StoryDao {
     suspend fun deleteStories()
 
     @Query("SELECT * FROM story")
-    suspend fun getStoryEntitiesForWidget(): List<StoryEntity>
+    suspend fun getStoryListForWidget(): List<StoryEntity>
+
+    @Query("SELECT * FROM story WHERE lat IS NOT NULL AND lon IS NOT NULL")
+    fun getStoryListForMap(): Flow<List<StoryEntity>>
 }

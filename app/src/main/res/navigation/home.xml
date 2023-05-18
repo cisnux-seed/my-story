@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="dev.cisnux.mystory.ui.HomeFragment"
+        android:label="fragment_home_list"
+        tools:layout="@layout/story_item">
+        <action
+            android:id="@+id/action_homeFragment_to_postStoryFragment"
+            app:destination="@id/postStoryFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_homeFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/postStoryFragment"
+        android:name="dev.cisnux.mystory.ui.PostStoryFragment"
+        android:label="fragment_post_story"
+        tools:layout="@layout/fragment_post_story" />
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="dev.cisnux.mystory.ui.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
+</navigation>

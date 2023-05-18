@@ -7,13 +7,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputLayout.END_ICON_NONE
-import com.google.android.material.textfield.TextInputLayout.END_ICON_PASSWORD_TOGGLE
 import dagger.hilt.android.AndroidEntryPoint
 import dev.cisnux.mystory.R
 import dev.cisnux.mystory.databinding.FragmentLoginBinding
@@ -31,8 +28,7 @@ class LoginFragment : Fragment() {
     private val viewModel: AuthViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
         return binding.root
@@ -48,26 +44,19 @@ class LoginFragment : Fragment() {
 
     private fun playAnimation() = with(binding) {
         val loginPict =
-            ObjectAnimator.ofFloat(loginPict, View.ALPHA, 1F)
-                .setDuration(ANIMATION_DURATION)
-        val emailEditTextLayout =
-            ObjectAnimator.ofFloat(emailEditTextLayout, View.ALPHA, 1F)
-                .setDuration(ANIMATION_DURATION)
+            ObjectAnimator.ofFloat(loginPict, View.ALPHA, 1F).setDuration(ANIMATION_DURATION)
+        val emailEditTextLayout = ObjectAnimator.ofFloat(emailEditTextLayout, View.ALPHA, 1F)
+            .setDuration(ANIMATION_DURATION)
         val passwordEditTextLayout = ObjectAnimator.ofFloat(passwordEditTextLayout, View.ALPHA, 1F)
             .setDuration(ANIMATION_DURATION)
-        val signup = ObjectAnimator.ofFloat(signUp, View.ALPHA, 1F)
-            .setDuration(ANIMATION_DURATION)
+        val signup = ObjectAnimator.ofFloat(signUp, View.ALPHA, 1F).setDuration(ANIMATION_DURATION)
         val loginButton = ObjectAnimator.ofFloat(loginButton, View.ALPHA, 1F).setDuration(
             ANIMATION_DURATION
         )
 
         AnimatorSet().apply {
             playSequentially(
-                loginPict,
-                emailEditTextLayout,
-                passwordEditTextLayout,
-                signup,
-                loginButton
+                loginPict, emailEditTextLayout, passwordEditTextLayout, signup, loginButton
             )
         }.start()
     }
@@ -76,20 +65,14 @@ class LoginFragment : Fragment() {
         loginButton.setOnClickListener {
             if (emailEditText.text?.isEmpty() == true) {
                 Snackbar.make(
-                    binding.root,
-                    getString(R.string.snackbar_empty_email),
-                    Snackbar.LENGTH_SHORT
-                )
-                    .show()
+                    binding.root, getString(R.string.snackbar_empty_email), Snackbar.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
             if (passwordEditText.text?.isEmpty() == true) {
                 Snackbar.make(
-                    binding.root,
-                    getString(R.string.snackbar_empty_password),
-                    Snackbar.LENGTH_SHORT
-                )
-                    .show()
+                    binding.root, getString(R.string.snackbar_empty_password), Snackbar.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
             if (emailEditText.error == null && passwordEditText.error == null) {
@@ -112,10 +95,9 @@ class LoginFragment : Fragment() {
                         binding.root,
                         getString(R.string.success_login_message),
                         Snackbar.LENGTH_SHORT
-                    )
-                        .show()
-                    val toHomeFragment = LoginFragmentDirections.actionLoginFragmentToHomeFragment()
-                    findNavController().navigate(toHomeFragment)
+                    ).show()
+                    findNavController().navigate(R.id.action_global_homeFragment)
+                    viewModel.resetLoginSession()
                 }
 
                 is ApplicationState.Failed -> {
@@ -127,8 +109,7 @@ class LoginFragment : Fragment() {
                     }
                     val errorMessage = applicationState.failure.message
                     errorMessage?.let {
-                        Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT)
-                            .show()
+                        Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
                     }
                 }
 
@@ -153,12 +134,7 @@ class LoginFragment : Fragment() {
             findNavController().navigate(toRegisterFragment)
         }
         passwordEditText.formType = FormType.Password
-        passwordEditText.doOnTextChanged {_, _, _, _ ->
-            passwordEditTextLayout.endIconMode = if (passwordEditText.error != null)
-                END_ICON_NONE
-            else
-                END_ICON_PASSWORD_TOGGLE
-        }
+        passwordEditText.textInputLayout = passwordEditTextLayout
     }
 
     override fun onDestroy() {

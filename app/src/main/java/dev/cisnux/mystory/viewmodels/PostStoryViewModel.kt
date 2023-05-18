@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.cisnux.mystory.domain.PostStory
 import dev.cisnux.mystory.domain.StoryRepository
 import dev.cisnux.mystory.utils.ApplicationState
 import kotlinx.coroutines.launch
@@ -22,12 +23,13 @@ class PostStoryViewModel @Inject constructor(private val repository: StoryReposi
     suspend fun rotatePhoto(file: File) =
         repository.rotatePhoto(file)
 
-
-    fun postStory(file: File, description: String) = viewModelScope.launch {
-        repository.postStory(file, description).collect {
-            _postStoryState.value = it
+    fun postStory(file: File, description: String, lat: Double?, lon: Double?) =
+        viewModelScope.launch {
+            val postStory = PostStory(file, description, lat, lon)
+            repository.postStory(postStory).collect {
+                _postStoryState.value = it
+            }
         }
-    }
 
     suspend fun convertUriPhotoToFilePhoto(photoUri: Uri) = repository.convertUriToFile(photoUri)
 }

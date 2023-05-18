@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.paging.PagingSource
 import dev.cisnux.mystory.database.RemoteKeyEntity
 import dev.cisnux.mystory.database.StoryEntity
+import kotlinx.coroutines.flow.Flow
 import java.io.File
 
 interface StoryLocalDataSource {
@@ -14,7 +15,8 @@ interface StoryLocalDataSource {
         remoteKeys: List<RemoteKeyEntity>
     )
     fun getStoryEntities(): PagingSource<Int, StoryEntity>
-    suspend fun getStoryForWidgets(): List<StoryEntity>
+    suspend fun getStoryListForWidget(): List<StoryEntity>
+    fun getStoryListForMap(): Flow<List<StoryEntity>>
     suspend fun createStoryFile(): File
     suspend fun rotateFile(file: File)
     suspend fun reduceImage(file: File): File

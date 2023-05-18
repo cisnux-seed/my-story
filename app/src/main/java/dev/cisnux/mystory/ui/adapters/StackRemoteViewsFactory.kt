@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.util.Log
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import androidx.core.os.bundleOf
@@ -30,7 +29,6 @@ internal class StackRemoteViewsFactory(
     override fun onDataSetChanged(): Unit =
         runBlocking {
             val latestStories = repository.getStoriesForWidget()
-            Log.d(StackRemoteViewsFactory::class.simpleName, latestStories.toString())
             if (stories.size > 0)
                 stories.clear()
             stories.addAll(latestStories.map { story ->

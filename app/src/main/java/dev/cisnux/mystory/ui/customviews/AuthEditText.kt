@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.core.widget.doOnTextChanged
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import dev.cisnux.mystory.R
 import dev.cisnux.mystory.utils.FormType
 import dev.cisnux.mystory.utils.isEmail
@@ -12,6 +13,8 @@ import dev.cisnux.mystory.utils.isPasswordSecure
 
 class AuthEditText : TextInputEditText {
     var formType = FormType.EmailAddress
+
+    var textInputLayout: TextInputLayout? = null
 
     constructor(context: Context) : super(context)
 
@@ -39,5 +42,9 @@ class AuthEditText : TextInputEditText {
                 else null
             }
         }
+        textInputLayout?.endIconMode = if (error != null)
+            TextInputLayout.END_ICON_NONE
+        else
+            TextInputLayout.END_ICON_PASSWORD_TOGGLE
     }
 }

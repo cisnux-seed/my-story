@@ -22,6 +22,9 @@ data class ListStoryItem(
     @Json(name = "name")
     val name: String,
 
+    @Json(name = "description")
+    val description: String,
+
     @Json(name = "photoUrl")
     val photoUrl: String,
 
@@ -29,20 +32,21 @@ data class ListStoryItem(
     val createdAt: String,
 
     @Json(name = "lat")
-    val lat: Double,
+    val lat: Double?,
 
     @Json(name = "lon")
-    val lon: Double
+    val lon: Double?
 )
 
 fun List<ListStoryItem>.asStoryEntities(): List<StoryEntity> =
-    map { (id, name, photoUrl, createdAt, lat, lon) ->
+    map { (id, name, description, photoUrl, createdAt, lat, lon) ->
         StoryEntity(
             id = id,
             name = name,
             photoUrl = photoUrl,
             createdAt = createdAt,
             lat = lat,
-            lon = lon
+            lon = lon,
+            description = description
         )
     }

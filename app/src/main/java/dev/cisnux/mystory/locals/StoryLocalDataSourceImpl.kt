@@ -12,6 +12,7 @@ import dev.cisnux.mystory.database.RemoteKeyEntity
 import dev.cisnux.mystory.database.StoryDatabase
 import dev.cisnux.mystory.database.StoryEntity
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -49,9 +50,12 @@ class StoryLocalDataSourceImpl @Inject constructor(
     override fun getStoryEntities(): PagingSource<Int, StoryEntity> =
         database.storyDao().getStoryEntities()
 
-    override suspend fun getStoryForWidgets(): List<StoryEntity> = withContext(Dispatchers.IO) {
-        database.storyDao().getStoryEntitiesForWidget()
+    override suspend fun getStoryListForWidget(): List<StoryEntity> = withContext(Dispatchers.IO) {
+        database.storyDao().getStoryListForWidget()
     }
+
+    override fun getStoryListForMap(): Flow<List<StoryEntity>> =
+        database.storyDao().getStoryListForMap()
 
     override suspend fun createStoryFile(): File = withContext(Dispatchers.IO) {
         val timeStamp: String = SimpleDateFormat(

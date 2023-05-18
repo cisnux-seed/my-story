@@ -3,7 +3,7 @@ package dev.cisnux.mystory.di
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
+import androidx.security.crypto.MasterKey
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,12 +21,14 @@ object EncryptedSharedPreferencesModule {
     fun provideEncryptedSharedPreferences(
         @ApplicationContext applicationContext: Context
     ): SharedPreferences {
-        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+        val masterKeyAlias = MasterKey.Builder(applicationContext)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
 
         return EncryptedSharedPreferences.create(
+            applicationContext,
             DICODING_API_TOKEN,
             masterKeyAlias,
-            applicationContext,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )

@@ -15,15 +15,15 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(private val repository: AuthRepository) :
     ViewModel() {
-    private val _registerState = MutableLiveData<ApplicationState<String>>()
+    private var _registerState = MutableLiveData<ApplicationState<String>>()
     val registerState: LiveData<ApplicationState<String>> get() = _registerState
 
     private var _loginState = MutableLiveData<ApplicationState<String>>()
     val loginState: LiveData<ApplicationState<String>>
         get() = _loginState
 
-    private val _isAlreadyLogin = MutableLiveData<String?>()
-    val isAlreadyLogin: LiveData<Boolean> = _isAlreadyLogin.map {
+    private val _isLoggedIn = MutableLiveData<String?>()
+    val isLoggedIn: LiveData<Boolean> = _isLoggedIn.map {
         it != null
     }
 
@@ -42,17 +42,25 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepository) 
         val userAuth = UserAuth(email, password)
         repository.login(userAuth).collect {
             _loginState.value = it
-            if(it is ApplicationState.Success)
-                _isAlreadyLogin.value = it.data
+            if (it is ApplicationState.Success)
+                _isLoggedIn.value = it.data
         }
     }
 
     fun logout() = viewModelScope.launch {
-        _isAlreadyLogin.value = null
+        _isLoggedIn.value = null
         repository.logout()
     }
 
+    fun resetRegisterSession() {
+        _registerState = MutableLiveData<ApplicationState<String>>()
+    }
+
+    fun resetLoginSession() {
+        _loginState = MutableLiveData<ApplicationState<String>>()
+    }
+
     private fun getLoginSession() = viewModelScope.launch {
-        _isAlreadyLogin.value = repository.isAlreadyLogin()
+        _isLoggedIn.value = repository.isAlreadyLogin()
     }
 }

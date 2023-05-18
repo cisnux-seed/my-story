@@ -9,9 +9,13 @@ import java.io.File
 interface StoryRepository {
     fun getStories(): Flow<PagingData<Story>>
     suspend fun getStoriesForWidget(): List<Story>
+    fun getStoriesForMap(): Flow<List<StoryMap>>
     fun getDetailStory(id: String): Flow<ApplicationState<DetailStory>>
     suspend fun getPhotoFile(): File
     suspend fun convertUriToFile(uri: Uri): File
-    fun postStory(file: File, description: String): Flow<ApplicationState<Nothing>>
+    fun postStory(
+        postStory: PostStory
+    ): Flow<ApplicationState<Nothing>>
+
     suspend fun rotatePhoto(file: File)
 }

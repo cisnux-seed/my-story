@@ -33,4 +33,9 @@
     <string name="transition_username" translatable="false">username</string>
     <string name="transition_user_profile" translatable="false">user_profile</string>
     <string name="empty_stories_description">no stories</string>
+    <string name="share_my_location">Share My location</string>
+    <string name="turn_on_gps">You must enable GPS to display your location!</string>
+    <string name="title_story_locations" translatable="false">Story</string>
+    <string name="title_home" translatable="false">Home</string>
+    <string name="refresh_description">Refresh stories</string>
 </resources>

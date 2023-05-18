@@ -11,10 +11,11 @@ private const val TABLE_NAME = "story"
 data class StoryEntity(
     @PrimaryKey val id: String,
     val name: String,
+    @ColumnInfo(name = "description", defaultValue = "") val description: String,
     @ColumnInfo(name = "photo_url") val photoUrl: String,
     @ColumnInfo(name = "created_at") val createdAt: String,
-    val lat: Double,
-    val lon: Double
+    val lat: Double?,
+    val lon: Double?
 )
 
 fun StoryEntity.asStory(): Story = Story(
@@ -23,16 +24,19 @@ fun StoryEntity.asStory(): Story = Story(
     photoUrl = photoUrl,
     createdAt = createdAt,
     lat = lat,
-    lon = lon
+    lon = lon,
+    description = description
 )
 
-fun List<StoryEntity>.asStories(): List<Story> = map { (id, name, photoUrl, createdAt, lat, lon) ->
-    Story(
-        id = id,
-        username = name,
-        photoUrl = photoUrl,
-        createdAt = createdAt,
-        lat = lat,
-        lon = lon
-    )
-}
+fun List<StoryEntity>.asStories(): List<Story> =
+    map { (id, name, description, photoUrl, createdAt, lat, lon) ->
+        Story(
+            id = id,
+            username = name,
+            photoUrl = photoUrl,
+            createdAt = createdAt,
+            lat = lat,
+            lon = lon,
+            description = description
+        )
+    }

@@ -16,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import dev.cisnux.mystory.R
 import dev.cisnux.mystory.databinding.FragmentHomeBinding
+import dev.cisnux.mystory.ui.adapters.LoadingStateAdapter
 import dev.cisnux.mystory.ui.adapters.RecyclerViewSpacer
 import dev.cisnux.mystory.ui.adapters.StoryAdapter
 import dev.cisnux.mystory.utils.Failure
@@ -48,20 +49,20 @@ class HomeFragment : Fragment() {
         homeViewModel.stories.observe(viewLifecycleOwner) {
             adapter.submitData(lifecycle, it)
         }
-        val savedStateHandle = findNavController().currentBackStackEntry!!.savedStateHandle
-        savedStateHandle.getLiveData<Boolean>(PostStoryFragment.ON_POST)
-            .observe(viewLifecycleOwner) { isPosted ->
-                if (isPosted)
+        val savedStateHandle = findNavController().currentBackStackEntry?.savedStateHandle
+        savedStateHandle?.getLiveData<Boolean>(PostStoryFragment.ON_POST)
+            ?.observe(viewLifecycleOwner) { isPosted ->
+                if (isPosted) {
                     binding.storyRecyclerView.smoothScrollToPosition(0)
+                }
             }
     }
 
     private fun setupHomeView() = with(binding) {
         root.visibility = View.GONE
-        authViewModel.isAlreadyLogin.observe(viewLifecycleOwner) {
+        authViewModel.isLoggedIn.observe(viewLifecycleOwner) {
             if (!it) {
-                val toLoginFragment = HomeFragmentDirections.actionHomeFragmentToLoginFragment()
-                findNavController().navigate(toLoginFragment)
+                findNavController().navigate(R.id.action_global_loginFragment)
             } else {
                 root.visibility = View.VISIBLE
             }
@@ -85,7 +86,7 @@ class HomeFragment : Fragment() {
             adapter.loadStateFlow.collect {
                 val loadState = it.refresh
                 progressBar.isVisible =
-                    loadState is LoadState.Loading || loadState is LoadState.Error
+                    loadState is LoadState.Loading && adapter.itemCount == 0
                 if (loadState is LoadState.Error) {
                     val failure = loadState.error
                     if (failure is Failure.ConnectionFailure) {
@@ -98,14 +99,18 @@ class HomeFragment : Fragment() {
                             .show()
                     }
                 }
-                emptyStories.isVisible = adapter.itemCount == 0
+                emptyStories.isVisible = loadState is LoadState.NotLoading && adapter.itemCount == 0
             }
         }
         val layoutManager = LinearLayoutManager(requireActivity())
         val divider = RecyclerViewSpacer()
         storyRecyclerView.layoutManager = layoutManager
         storyRecyclerView.addItemDecoration(divider)
-        storyRecyclerView.adapter = adapter
+        storyRecyclerView.adapter = adapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                adapter.retry()
+            }
+        )
         storyRecyclerView.setHasFixedSize(true)
     }
 
